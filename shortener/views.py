@@ -8,7 +8,10 @@ def home(request):
         if form.is_valid():
             original_url = form.cleaned_data['original_url']
             url_instance = URL(original_url=original_url)
-            url_instance.save()
+            if not url_instance :
+                url_instance.save()
+            
+            url_instance = URL.objects.get(original_url=original_url)
             return render(request, 'shortener/home.html', {'short_url': url_instance.short_url})
     else:
         form = URLForm()

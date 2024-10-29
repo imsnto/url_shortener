@@ -7,7 +7,11 @@ class URL(models.Model):
     short_url = models.CharField(max_length=10, unique=True)
 
     def save(self, *args, **kwargs):
-        if not self.short_url:
+        existing_url = URL.objects.filter(original_url=self.original_url).first()
+        if existing_url:
+            return existing_url
+
+        else:
             self.short_url = self.generate_unique_short_url()
 
         super().save(*args, **kwargs)
